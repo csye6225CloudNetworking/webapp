@@ -63,7 +63,7 @@ jobs:
 
         sudo systemctl status mysql
 
-        mysql -u root -p"root" -e "CREATE DATABASE  Assignment3;"
+        mysql -u ${{ secrets.MYSQL_USER}} -p"${{secrets.MYSQL_PASSWORD}}"
 
  #  asd
     - name: Run Tests
