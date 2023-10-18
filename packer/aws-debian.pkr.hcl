@@ -83,10 +83,12 @@ build {
       "sudo DEBIAN_FRONTEND=noninteractive apt -q --assume-yes install mariadb-client mariadb-server",
       "sudo systemctl start mariadb",
       "sudo systemctl enable mariadb",
+       "sudo mysql",
       "sudo DEBIAN_FRONTEND=noninteractive apt install -y unzip",
-      "unzip webapp",
-      "sudo mysql",
-      "ls -a"
+      "pwd",
+      "ls -a",
+      "unzip webapp.zip",   
+      
     ]
   }
 
