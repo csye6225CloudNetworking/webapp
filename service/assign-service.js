@@ -91,13 +91,13 @@ export async function getAssignmentsByUser() {
   }
 
 
-  export async function deleteAssignmentById(assignmentId) {
+  export async function deleteAssignmentById(assignmentId, userEmail) {
     
     try { 
         const assignment = await Assignment.findOne({ where: { id : assignmentId } });
         const email = assignment.createdBy;
 
-        if (email == assignment.createdBy) {
+        if (userEmail == assignment.createdBy) {
 
             await Assignment.destroy({ where: { id: assignmentId } });
             return true;

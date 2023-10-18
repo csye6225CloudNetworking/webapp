@@ -67,6 +67,13 @@ console.log("healthy",isHealthy);
 app.listen(port,() => {console.log("server",port);
 })
 
+app.patch("/v1/assignments/:id", (req, res) => {
+  res.setHeader("Cache-Control", "no-cache");
+  res.setHeader("Pragma", "no-cache");
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.status(405).send();
+});
+
 bootstrap()
 
 export default app;

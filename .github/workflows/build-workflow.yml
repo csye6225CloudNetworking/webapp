@@ -1,0 +1,61 @@
+name: Build Packer AMI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  packer_build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name:  env file
+        run: |
+         touch .env
+        
+         echo "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE}}" >> .env
+         echo "MYSQL_USER=${{ secrets.MYSQL_USER}}" >> .env
+         echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD}}" >> .env
+         echo "MYSQL_PORT=${{ secrets.MYSQL_PORT}}" >> .env
+         echo "MYSQL_HOST=${{ secrets.MYSQL_HOST}}" >> .env
+         echo "DB_DIALECT=${{ secrets.DB_DIALECT}}" >> .env
+         cat .env
+         pwd 
+
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+         aws-access-key-id: AKIAWTOCE2YO6OO2CZ75
+         aws-secret-access-key: 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
+         aws-region: 'us-east-1'
+
+      - name: Zip Application Artifact
+        run:  zip -r webapp.zip ./
+
+      - name: Install Packer
+        uses: hashicorp/setup-packer@main
+        with:
+          packer_version: '1.8.6'
+
+      - name: Run packer init
+        run: packer init ./webapp/aws-debian.pkr.hcl
+
+      - name: Build AMI with Packer
+        id: packer_build
+        run: |
+         packer build ./webapp/aws-debian.pkr.hcl 
+         
+
+      - name: Fail if any step failed
+        run: |
+          if [[ ${{ job.status }} != 'completed' ]]; then
+            echo "One or more steps in the workflow failed. Cancelling the AMI build."
+            exit 1
+
+      
+          
