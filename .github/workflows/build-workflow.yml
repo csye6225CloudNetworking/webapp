@@ -43,12 +43,12 @@ jobs:
           packer_version: '1.8.6'
 
       - name: Run packer init
-        run: packer init ./webapp/aws-debian.pkr.hcl
+        run: packer init packer/aws-debian.pkr.hcl
 
       - name: Build AMI with Packer
         id: packer_build
         run: |
-         packer build ./webapp/aws-debian.pkr.hcl 
+         packer build packer/aws-debian.pkr.hcl 
          
 
       - name: Fail if any step failed
