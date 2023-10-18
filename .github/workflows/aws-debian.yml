@@ -26,14 +26,14 @@ jobs:
           packer_version: '1.8.6'
 
       - name: Initialize Packer
-        run: packer init ./webapp/
+        run: packer init Packer/
        
       - name: Packer fmt
-        run: packer fmt -check ./webapp/aws-debian.pkr.hcl
+        run: packer fmt -check Packer/aws-debian.pkr.hcl
 
       - name: Packer validate
         run: |
-          packer validate ./webapp/aws-debian.pkr.hcl
+          packer validate Packer/aws-debian.pkr.hcl
           
       - name: Check for errors
         run: |
