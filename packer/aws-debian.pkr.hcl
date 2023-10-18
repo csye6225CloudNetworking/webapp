@@ -43,7 +43,7 @@ source "amazon-ebs" "debian-ami" {
   ami_description = "AMI FOR CSYE"
   ssh_username    = "${var.SSH_USERNAME}"
   subnet_id       = "${var.subnet_id}"
-  ami_users       = ["543718191891", "4540-6308-5085"]
+  ami_users       = ["543718191891", "454063085085"]
 
   aws_polling {
     delay_seconds = 120
