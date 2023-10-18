@@ -43,6 +43,9 @@ jobs:
       - name: install the dependencies
         run: npm install
 
+      - name: run the integration
+        run: npm test
+
       - name: Zip Application Artifact
         
         run: zip -r webapp.zip ./
