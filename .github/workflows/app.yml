@@ -65,8 +65,7 @@ jobs:
 
         mysql -u ${{ secrets.MYSQL_USER}} -p"${{secrets.MYSQL_PASSWORD}}"
 
-    - name : install depenedency
-      run : npm install
+  
     
 
  #  asd
