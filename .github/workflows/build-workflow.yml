@@ -18,6 +18,11 @@ jobs:
         with:
          node-version: 18
 
+      - name: install the dependencies
+        run: |
+          npm install
+          
+
 
       - name:  env file
         run: |
@@ -32,6 +37,16 @@ jobs:
          cat .env
          pwd 
 
+      - name: configuremysql
+        run: |
+         sudo apt-get update
+         sudo apt-get install -y curl
+         sudo systemctl start mysql
+         sudo systemctl status mysql
+         mysql -u ${{ secrets.MYSQL_USER }} -p"${{ secrets.MYSQL_PASSWORD }}"
+
+      - name: Run Tests
+        run : npm test
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -40,10 +55,7 @@ jobs:
          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
          aws-region: 'us-east-1'
 
-      - name: install the dependencies
-        run: |
-          npm install
-          npm test
+      
 
 
       - name: Zip Application Artifact
