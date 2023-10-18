@@ -79,11 +79,12 @@ build {
     inline = [
       "sudo apt-get update",
       "sudo apt-get install -y nodejs npm",
-      "sudo apt-get install -y unzip",
       "sudo DEBIAN_FRONTEND=noninteractive apt update -q",
       "sudo DEBIAN_FRONTEND=noninteractive apt -q --assume-yes install mariadb-client mariadb-server",
       "sudo systemctl start mariadb",
       "sudo systemctl enable mariadb",
+      "sudo DEBIAN_FRONTEND=noninteractive apt install -y unzip",
+      "unzip webapp",
       "sudo mysql",
       "ls -a"
     ]
