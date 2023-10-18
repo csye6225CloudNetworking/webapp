@@ -72,6 +72,11 @@ build {
 
   sources = ["source.amazon-ebs.debian-ami"]
 
+provisioner "file" {
+    source      = "webapp"
+    destination = "~/webapp.zip"
+  }
+
   provisioner "shell" {
     /* enviornment_vars = [
       ""
@@ -93,10 +98,7 @@ build {
     ]
   }
 
-  provisioner "file" {
-    source      = "/home/runner/work/new-forked-webapp/new-forked-webapp/webapp.zip"
-    destination = "/home/admin/webapp.zip"
-  }
+  
   /* 
   name    = "custom-debian-12-ami"
   sources = ["source.amazon-ebs.debian"] */
