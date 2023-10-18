@@ -83,8 +83,10 @@ build {
       "sudo DEBIAN_FRONTEND=noninteractive apt -q --assume-yes install mariadb-client mariadb-server",
       "sudo systemctl start mariadb",
       "sudo systemctl enable mariadb",
-      "mkdir webapp",
-      "cd webapp",
+      "sudo unzip webapp.zip",
+      "sudo mysql",
+      "sudo mysql --execute="ALTER USER 'root'@'localhost' IDENTIFIED BY 'root'; FLUSH PRIVILEGES;",
+      "sudo mysql --execute="EXIT;"
       "ls -a"
     ]
   }
