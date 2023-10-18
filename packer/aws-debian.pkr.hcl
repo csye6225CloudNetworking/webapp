@@ -87,6 +87,7 @@ build {
       "sudo DEBIAN_FRONTEND=noninteractive apt install -y unzip",
       "pwd",
       "ls -a",
+      "cd /home/admin",
       "unzip webapp.zip",
 
     ]
