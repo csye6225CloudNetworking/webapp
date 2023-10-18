@@ -90,7 +90,7 @@ build {
   }
 
   provisioner "file" {
-    source      = "/home/runner/work/test2/test2/webapp.zip"
+    source      = "/home/runner/work/new-forked-webapp/new-forked-webapp/webapp.zip"
     destination = "/home/admin/webapp.zip"
   }
   /* 
