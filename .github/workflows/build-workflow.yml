@@ -51,12 +51,7 @@ jobs:
          packer build packer/aws-debian.pkr.hcl 
          
 
-      - name: Fail if any step failed
-        run: |
-          if [[ ${{ job.status }} != 'completed' ]]; then
-            echo "One or more steps in the workflow failed. Cancelling the AMI build."
-            exit 1
-          fi
+      
 
       
           
