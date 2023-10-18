@@ -41,10 +41,10 @@ jobs:
          aws-region: 'us-east-1'
 
       - name: install the dependencies
-        run: npm install
+        run: |
+          npm install
+          npm test
 
-      - name: run the integration
-        run: npm test
 
       - name: Zip Application Artifact
         
