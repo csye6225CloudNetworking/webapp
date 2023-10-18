@@ -43,8 +43,8 @@ source "amazon-ebs" "debian-ami" {
   ami_description = "AMI FOR CSYE"
   ssh_username    = "${var.SSH_USERNAME}"
   subnet_id       = "${var.subnet_id}"
-  ami_users = ["543718191891","4540-6308-5085"]
- 
+  ami_users       = ["543718191891", "4540-6308-5085"]
+
   aws_polling {
     delay_seconds = 120
     max_attempts  = 50
@@ -84,8 +84,10 @@ build {
       "sudo DEBIAN_FRONTEND=noninteractive apt -q --assume-yes install mariadb-client mariadb-server",
       "sudo systemctl start mariadb",
       "sudo systemctl enable mariadb",
-      "mkdir webapp",
-      "cd webapp",
+      "sudo unzip webapp.zip",
+      "sudo mysql",
+      "sudo mysql --execute 'ALTER USER ''root''@''localhost'' IDENTIFIED BY ''root''; FLUSH PRIVILEGES;'",
+      "sudo mysql --execute 'EXIT;'",
       "ls -a"
     ]
   }
