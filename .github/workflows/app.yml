@@ -65,6 +65,9 @@ jobs:
 
         mysql -u ${{ secrets.MYSQL_USER}} -p"${{secrets.MYSQL_PASSWORD}}"
 
+  
+    
+
  #  asd
     - name: Run Tests
 

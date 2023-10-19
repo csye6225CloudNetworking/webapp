@@ -35,7 +35,7 @@ export async function createAssignment(req, res) {
       res.status(403).json({ error: 'Forbidden' });
     }
     else{
-        res.status(400).json({error: error.message});
+        res.status(400).json();
     }
   }
 };
@@ -56,7 +56,7 @@ export async function getAssignmentsById(req, res) {
     }    
   } catch (error) {
     console.error(error);
-    res.status(404).json({ message: 'Not Found!' });
+    res.status(400).json({  });
   }
 }
 
@@ -66,8 +66,9 @@ export async function getAssignmentsById(req, res) {
     console.log(assignmentId);
   
     try {
+      const createdBy = getCred(req)[0]
       // Call the assignService to delete the assignment by ID
-     if ( await assignService.deleteAssignmentById(assignmentId)){
+     if ( await assignService.deleteAssignmentById(assignmentId, createdBy)){
         res.status(204).send(); // Respond with a success status (204 No Content)
      }
       else{
@@ -75,7 +76,7 @@ export async function getAssignmentsById(req, res) {
       }    
     } catch (error) {
       console.error(error);
-      res.status(404).json({ message: 'Not found!' });
+      res.status(400).json({ message: 'Not found!' });
     }
   }
 
