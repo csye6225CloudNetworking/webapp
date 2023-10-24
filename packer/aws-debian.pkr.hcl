@@ -77,6 +77,7 @@ build {
     destination = "~/webapp.zip"
   }
 
+
   provisioner "shell" {
     /* enviornment_vars = [
       ""
@@ -84,16 +85,16 @@ build {
     inline = [
       "sudo apt-get update",
       "sudo apt-get install -y nodejs npm",
+      "sudo apt-get install -y unzip",
       "sudo DEBIAN_FRONTEND=noninteractive apt update -q",
       "sudo DEBIAN_FRONTEND=noninteractive apt -q --assume-yes install mariadb-client mariadb-server",
       "sudo systemctl start mariadb",
       "sudo systemctl enable mariadb",
+      "sudo unzip webapp.zip",
       "sudo mysql",
-      "sudo DEBIAN_FRONTEND=noninteractive apt install -y unzip",
-      "pwd",
-      "ls -a",
-      "cd /home/admin",
-      "unzip webapp.zip",
+      "sudo mysql --execute=\"ALTER USER 'root'@'localhost' IDENTIFIED BY 'root'; FLUSH PRIVILEGES;\"",
+      "sudo mysql --execute=\"EXIT;\"",
+      "ls -a"
 
     ]
   }
