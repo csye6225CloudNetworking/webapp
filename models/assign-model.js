@@ -1,17 +1,17 @@
 /* const { DataTypes, sequelize } = require('sequelize');
 */
 import sequelize from '../seq.js';
-import { DataTypes } from 'sequelize'
+import { DataTypes,UUIDV4  } from 'sequelize'
 
 
 const Assignment = sequelize.define('Assignment', {
 
- /*  id: {
+   id: {
     type: DataTypes.UUID,
     defaultValue: UUIDV4,
     primaryKey: true,
     unique:true,
-}, */
+}, 
   name: {
     type: DataTypes.STRING,
   },

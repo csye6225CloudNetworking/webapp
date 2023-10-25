@@ -80,15 +80,16 @@ build {
   provisioner "shell" {
 
     inline = [
+      "sudo groupadd csye6225",
+      "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225",
       "sudo apt-get update",
       "sudo apt-get install -y nodejs npm",
       "sudo apt-get install -y unzip",
-      "sudo unzip webapp.zip",
+      "sudo unzip webapp.zip -d csye6225",
       "npm install",
-      "sudo apt install nodejs npm -y",
-      "sudo cp /home/admin/app.service /lib/systemd/system/app.service",
-      "sudo groupadd csye6225",
-      "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225",
+      "sudo cp /opt/csye6225/app.service /lib/systemd/system/app.service",
+      "sudo chown -R user:usergrp pathdir",
+      "sudo chmod -R 750 pathdir",
       "systemctl daemon-reload",
       "sudo systemctl enable csye6225",
       "sudo systemctl start csye6225"
