@@ -6,12 +6,12 @@ import { DataTypes } from 'sequelize'
 
 const Assignment = sequelize.define('Assignment', {
 
-  id: {
+ /*  id: {
     type: DataTypes.UUID,
     defaultValue: UUIDV4,
     primaryKey: true,
     unique:true,
-},
+}, */
   name: {
     type: DataTypes.STRING,
   },
