@@ -10,6 +10,7 @@ const sequelize = new Sequelize({
   username: process.env.MYSQL_USER, // Use the value from .env or default to 'root'
   password: process.env.MYSQL_PASSWORD, // Use the value from .env or default to 'password'
   database: process.env.MYSQL_DATABASE, // Use the value from .env or default to 'sys'
+ 
 });
 
 // Rest of your Sequelize configuration and application code here
