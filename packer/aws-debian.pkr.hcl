@@ -76,7 +76,7 @@ build {
     source      = "webapp.zip"
     destination = "~/webapp.zip"
   }
- /*  provisioner "file" {
+  /*  provisioner "file" {
     source      = "app.service"
     destination = "/etc/systemd/system/app.service"
   } */
