@@ -80,17 +80,13 @@ build {
   provisioner "shell" {
 
     inline = [
-
       "sudo apt-get update",
       "sudo apt-get install -y nodejs npm",
       "sudo apt-get install -y unzip",
       "sudo unzip webapp.zip",
-      "npm install",
-      "sudo cp /home/admin/app.service /lib/systemd/system/app.service",
       "sudo groupadd csye6225",
-      "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225"
-      /*   "sudo chown -R csye6225:csye6225 /opt/csye6225/",
-      "sudo chmod -R 750 /opt/csye6225/" */
+      "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225",
+      "sudo cp /home/admin/app.service /lib/systemd/system/app.service"
 
     ]
   }
