@@ -3,6 +3,10 @@ Description=My Application Service
 
 ConditionPathExists = /home/admin/
 
+
+ConditionPathExists = /home/admin/
+
+
 After=cloud-init.target
 Wants=cloud-init.target
 
