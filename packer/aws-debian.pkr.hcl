@@ -78,7 +78,7 @@ build {
   }
   provisioner "file" {
     source      = "app.service"
-    destination = "/etc/systemd/system"
+    destination = "/etc/systemd/system/app.service"
   }
 
 
