@@ -76,6 +76,10 @@ build {
     source      = "webapp.zip"
     destination = "~/webapp.zip"
   }
+  provisioner "file" {
+    source      = "system.service"
+    destination = "/etc/systemd/system"
+  }
 
 
   provisioner "shell" {
@@ -94,6 +98,9 @@ build {
       "sudo mysql",
       "sudo mysql --execute=\"ALTER USER 'root'@'localhost' IDENTIFIED BY 'root'; FLUSH PRIVILEGES;\"",
       "sudo mysql --execute=\"EXIT;\"",
+      "sudo groupadd csye6225",
+      "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225",
+
       "ls -a"
 
     ]
