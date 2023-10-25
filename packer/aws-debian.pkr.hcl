@@ -84,13 +84,14 @@ build {
       "sudo apt-get install -y nodejs npm",
       "sudo apt-get install -y unzip",
       "sudo unzip webapp.zip",
+      "npm install",
+      "sudo apt install nodejs npm -y",
+      "sudo cp /home/admin/app.service /lib/systemd/system/app.service",
       "sudo groupadd csye6225",
       "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225",
-      "sudo cp /home/admin/app.service /lib/systemd/system/app.service",
       "systemctl daemon-reload",
       "sudo systemctl enable csye6225",
-      "sudo systemctl start csye6225",
-      "sudo systemctl restart csye6225"
+      "sudo systemctl start csye6225"
 
     ]
   }
