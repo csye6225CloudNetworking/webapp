@@ -83,20 +83,10 @@ build {
       "sudo apt-get update",
       "sudo apt-get install -y nodejs npm",
       "sudo apt-get install -y unzip",
-      "sudo DEBIAN_FRONTEND=noninteractive apt update -q",
-      "sudo DEBIAN_FRONTEND=noninteractive apt -q --assume-yes install mariadb-client mariadb-server",
-      "sudo systemctl start mariadb",
-      "sudo systemctl enable mariadb",
       "sudo unzip webapp.zip",
-      "sudo mysql",
       "sudo cp /home/admin/app.service /lib/systemd/system/app.service",
       "sudo groupadd csye6225",
-      "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225",
-      "sudo systemctl daemon-reload",
-      "sudo systemctl enable csye6225",
-      "sudo systemctl start csye6225"
-
-
+      "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225"
     ]
   }
 

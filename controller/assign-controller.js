@@ -24,6 +24,13 @@ export async function createAssignment(req, res) {
     }
   }
 
+  export const handlePatch = async (req, res) => {
+    if (req.method === 'PATCH') {
+      return res.status(405).json({ error: "Method Not Allowed" });
+    }
+  
+  };
+
   
   export async function getAssignmentsByUser(req, res) {
  

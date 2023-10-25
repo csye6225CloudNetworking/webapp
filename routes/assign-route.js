@@ -22,6 +22,10 @@ router.delete('/v1/assignments/:id',tokenize, assignController.deleteAssignment)
 // PUT /assignments/:assignmentId route to update an assignment
 router.put('/v1/assignments/:id', tokenize, assignController.updateAssignment);
 
+router.patch('/v1/assignments',assignController.handlePatch);
+
+router.patch('/v1/assignments/:id',assignController.handlePatch);
+
 
 
 //healthRoute
