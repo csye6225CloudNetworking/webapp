@@ -27,6 +27,9 @@ export async function tokenize(req, res, next){
 export const getCred = (req) =>{
 
   const token = req.header('Authorization')
+  if(!token){
+    return res.status(401).json("Unauthorized")
+  }
 
   const cred = Buffer.from(token.substring(6),'base64').toString('utf-8')
   const array = cred.split(':');
