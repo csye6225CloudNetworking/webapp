@@ -2,8 +2,3 @@
 
 fdd
 
-lll
-
-ll
-
-

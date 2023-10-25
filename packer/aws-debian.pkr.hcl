@@ -89,10 +89,13 @@ build {
       "sudo systemctl enable mariadb",
       "sudo unzip webapp.zip",
       "sudo mysql",
+      "sudo cp /home/admin/app.service /lib/systemd/system/app.service",
       "sudo groupadd csye6225",
       "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225",
-      "sudo cp home/admin/app.service /lib/systemd/system/app.service",
-      "ls -a"
+      "sudo systemctl daemon-reload",
+      "sudo systemctl enable csye6225",
+      "sudo systemctl start csye6225"
+
 
     ]
   }
