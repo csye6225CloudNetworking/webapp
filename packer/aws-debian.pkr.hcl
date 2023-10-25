@@ -88,8 +88,8 @@ build {
       "sudo unzip webapp.zip -d csye6225",
       "npm install",
       "sudo cp /opt/csye6225/app.service /lib/systemd/system/app.service",
-      "sudo chown -R user:usergrp pathdir",
-      "sudo chmod -R 750 pathdir",
+      "sudo chown -R csye6225:csye6225 /opt/csye6225/",
+      "sudo chmod -R 750 /opt/csye6225/",
       "systemctl daemon-reload",
       "sudo systemctl enable csye6225",
       "sudo systemctl start csye6225"
