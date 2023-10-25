@@ -76,10 +76,10 @@ build {
     source      = "webapp.zip"
     destination = "~/webapp.zip"
   }
-  provisioner "file" {
+ /*  provisioner "file" {
     source      = "app.service"
     destination = "/etc/systemd/system/app.service"
-  }
+  } */
 
 
   provisioner "shell" {
@@ -100,7 +100,7 @@ build {
       "sudo mysql --execute=\"EXIT;\"",
       "sudo groupadd csye6225",
       "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225",
-
+      "sudo cp app.service /etc/systemd/system/app.service"
       "ls -a"
 
     ]
