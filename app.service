@@ -8,6 +8,7 @@ Wants=cloud-init.target
 Type=simple
 User=csye6225
 Group=csye6225
+WorkingDirectory = /home/admin/
 ExecStart=/usr/bin/node /home/admin/app1.js
 EnvironmentFile=/home/admin/.env
 StandardOutput=syslog
