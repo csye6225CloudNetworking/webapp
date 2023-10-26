@@ -74,7 +74,7 @@ build {
 
   provisioner "file" {
     source      = "webapp.zip"
-    destination = "~/webapp.zip"
+    destination = "~/webappr"
   }
 
   provisioner "shell" {
