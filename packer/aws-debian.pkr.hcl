@@ -83,7 +83,7 @@ build {
       "sudo apt-get update",
       "sudo apt-get install -y nodejs npm",
       "sudo apt-get install -y unzip",
-      "sudo unzip webappr -d webapp",
+      "sudo unzip webapp.zip",
       "sudo groupadd csye6225",
       "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225",
       "sudo cp /home/admin/app.service /lib/systemd/system/app.service",
