@@ -89,7 +89,6 @@ build {
 
       "sudo unzip webapp.zip -d webapp",
       "cd webapp",
-      "npm install",
       "sudo apt install nodejs npm -y",
       "sudo cp /home/admin/webapp/app.service /lib/systemd/system/app.service",
       "sudo groupadd csye6225",
