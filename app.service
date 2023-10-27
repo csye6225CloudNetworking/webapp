@@ -8,6 +8,11 @@ Wants=cloud-init.target
 Type=simple
 User=csye6225
 Group=csye6225
+
+ExecStart=/usr/bin/node /home/admin/webapp/app1.js
+EnvironmentFile=/home/admin/webapp/.env
+Restart=on-always
+
 ExecStart=/usr/bin/node /home/admin/webapp/app1.js
 EnvironmentFile=/home/admin/webapp/.env
 Restart=on-always
