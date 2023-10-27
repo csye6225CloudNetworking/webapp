@@ -77,7 +77,6 @@ build {
 
     destination = "/home/admin/webapp.zip"
 
-    destination = "~/webapp.zip"
 
   }
 
@@ -96,12 +95,6 @@ build {
       "sudo groupadd csye6225",
       "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225",
       
-
-      "sudo unzip webapp.zip",
-      "sudo groupadd csye6225",
-      "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225",
-      "sudo cp /home/admin/app.service /lib/systemd/system/app.service",
-
 
 
     ]
