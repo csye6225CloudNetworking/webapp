@@ -73,7 +73,7 @@ build {
   sources = ["source.amazon-ebs.debian-ami"]
 
   provisioner "file" {
-    source      = "webapp.zip"
+    source      = "/home/runner/work/new-forked-webapp/new-forked-webapp/webapp.zip"
     destination = "/home/admin/webapp.zip"
   }
 
