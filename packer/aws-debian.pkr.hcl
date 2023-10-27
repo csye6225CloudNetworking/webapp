@@ -74,7 +74,10 @@ build {
 
   provisioner "file" {
     source      = "/home/runner/work/new-forked-webapp/new-forked-webapp/webapp.zip"
-    destination = "~/webapp.zip"
+
+    destination = "/home/admin/webapp.zip"
+
+
   }
 
   provisioner "shell" {
@@ -83,10 +86,15 @@ build {
       "sudo apt-get update",
       "sudo apt-get install -y nodejs npm",
       "sudo apt-get install -y unzip",
-      "sudo unzip webapp.zip",
+
+      "sudo unzip webapp.zip -d webapp",
+      "cd webapp",
+      "npm install",
+      "sudo apt install nodejs npm -y",
+      "sudo cp /home/admin/webapp/app.service /lib/systemd/system/app.service",
       "sudo groupadd csye6225",
       "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225",
-      "sudo cp /home/admin/app.service /lib/systemd/system/app.service",
+      
 
 
     ]
