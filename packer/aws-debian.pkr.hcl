@@ -1,138 +1,82 @@
+name: Build Packer AMI
 
-packer {
-  required_plugins {
-    amazon = {
-      version = ">= 1.0.0"
-      source  = "github.com/hashicorp/amazon"
-    }
-  }
-}
+on:
+  push:
+    branches:
+      - main
 
-variable "AWS_REGION" {
-  type    = string
-  default = "us-east-1"
-}
-variable "SOURCE_AMI_OWNER" {
-  type    = string
-  default = "454063085085"
-}
-variable "SOURCE_AMI_NAME" {
-  type    = string
-  default = "ami-06db4d78cb1d3bbf9"
-}
-variable "INSTANCE_TYPE" {
-  type    = string
-  default = "t2.micro"
-}
-variable "SSH_USERNAME" {
-  type    = string
-  default = "admin"
-}
+jobs:
+  packer_build:
+    runs-on: ubuntu-latest
 
-variable "subnet_id" {
-  type    = string
-  default = "subnet-0028adf715da30eb8"
-}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-source "amazon-ebs" "debian-ami" {
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+         node-version: 18
 
-  ami_name        = "csye6225_${formatdate("YYYY_MM_DD_hh_mm_ss", timestamp())}"
-  source_ami      = "${var.SOURCE_AMI_NAME}"
-  instance_type   = "${var.INSTANCE_TYPE}"
-  region          = "${var.AWS_REGION}"
-  ami_description = "AMI FOR CSYE"
-  ssh_username    = "${var.SSH_USERNAME}"
-  subnet_id       = "${var.subnet_id}"
-  ami_users       = ["543718191891", "454063085085"]
-
-  aws_polling {
-    delay_seconds = 120
-    max_attempts  = 50
-  }
-
-  launch_block_device_mappings {
-    delete_on_termination = true
-    device_name           = "/dev/xvda"
-    volume_size           = 8
-    volume_type           = "gp2"
-  }
-  /*   source_ami_filter {
-    filters = {
-      name                = "debian/images/*debian-12-amd64-*"
-      root-device-type    = "ebs"
-      virtualization-type = "hvm"
-    }
-    most_recent = true
-    owners      = [var.SOURCE_AMI_OWNER]
-  } */
-
-}
-
-build {
-
-  sources = ["source.amazon-ebs.debian-ami"]
-
-  provisioner "file" {
-    source      = "/home/runner/work/new-forked-webapp/new-forked-webapp/webapp.zip"
-
-    destination = "/home/admin/webapp.zip"
+      - name: install the dependencies
+        run: |
+          npm install
+          
 
 
-  }
+      - name:  env file
+        run: |
+         touch .env
+        
+         echo "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE}}" >> .env
+         echo "MYSQL_USER=${{ secrets.MYSQL_USER}}" >> .env
+         echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD}}" >> .env
+         echo "MYSQL_PORT=${{ secrets.MYSQL_PORT}}" >> .env
+         echo "MYSQL_HOST=${{ secrets.MYSQL_HOST}}" >> .env
+         echo "DB_DIALECT=${{ secrets.DB_DIALECT}}" >> .env
+         cat .env
+         pwd 
 
-  provisioner "shell" {
+      - name: configuremysql
+        run: |
+         sudo apt-get update
+         sudo apt-get install -y curl
+         sudo systemctl start mysql
+         sudo systemctl status mysql
+         mysql -u ${{ secrets.MYSQL_USER }} -p"${{ secrets.MYSQL_PASSWORD }}"
 
-    inline = [
-      "sudo apt-get update",
-      "sudo apt-get install -y nodejs npm",
-      "sudo apt-get install -y unzip",
+      - name: Run Tests
+        run : npm test
 
-      "sudo unzip webapp.zip -d webapp",
-      "cd webapp",
-      "sudo apt install nodejs npm -y",
-      "sudo cp /home/admin/webapp/app.service /lib/systemd/system/app.service",
-      "sudo groupadd csye6225",
-      "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225",
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+         aws-region: 'us-east-1'
+
       
 
 
-    ]
-  }
+      - name: Zip Application Artifact
+        
+        run: zip -r webapp.zip ./
 
+      - name: Install Packer
+        uses: hashicorp/setup-packer@main
+        with:
+          packer_version: '1.8.6'
 
-  /* 
-  name    = "custom-debian-12-ami"
-  sources = ["source.amazon-ebs.debian"] */
+      - name: Run packer init
+        run: packer init packer/aws-debian.pkr.hcl
 
-  /*  provisioner "shell" {
-   script = "./app.sh" 
-} */
-  /* provisioner "file" {
-   # Download the application artifact from GitHub Actions artifact
-  /*  // "wget -O app-artifact.zip https://github.com/your-repo/actions/artifacts/app-artifact/app-artifact.zip",
-  //source      = "app-artifact.zip"
-  //destination = "/var/www/your-node-app/app-artifact.zip"
-  // "unzip app-artifact.zip -d /var/www/your-node-app", 
+      - name: Build AMI with Packer
+        id: packer_build
+        run: |
+         packer build packer/aws-debian.pkr.hcl 
+         
 
-   source = "C:\\NORTHEASTERN_MASTERS\\FALL'23\\CLOUD\\ASSIGNMENT\\ASSIGNMENT_4\\Rutuja_Patil_002728420_04.zip"
-   destination = "/var/www/webapp"
-} */
-}
-/*  inline = [
-    "apt-get update -y",
-  "apt-get install -y nodejs npm unzip",  # Install Node.js, npm, and unzip
-    "npm install -g pm2",  # Install PM2 for process management
-     "apt-get install -y mysql-server mariadb-server postgresql",  # Install MySQL/MariaDB/PostgreSQL
-    "systemctl enable mysql mariadb postgresql",  # Enable the database services
-    "systemctl start mysql mariadb postgresql" */
+      
 
-#to share it with DEMO ACCOUNT
-/* post-processors {
-  ami-copier {
-    ami_name      = var.AMI_NAME
-    destination_regions = ["us-west-2", "us-east-1"]  # Add more regions as needed
-    target_account_ids = [var.DEMO_ACCOUNT_ID]  # Replace with your DEMO AWS Account ID
-    encrypt        = true  # Encrypt the copied AMI
-    snapshot_permissions = "private"  # Set the snapshot permissions to private
-  }
-} */
+      
+          
