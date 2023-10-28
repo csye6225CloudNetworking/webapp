@@ -1,15 +1,18 @@
 [Unit]
 Description=My Application Service
-After=cloud-final.service
-Wants=cloud-final.service
+After=cloud-init.target
+Wants=cloud-init.target
 
  
 [Service]
 Type=simple
 User=csye6225
-ExecStart=/usr/bin/node /home/admin/webapp/app1.js
-EnvironmentFile=/home/admin/webapp/.env
-Restart=always
+Group=csye6225
+WorkingDirectory = /home/admin/
+ExecStart=/usr/bin/node /home/admin/app1.js
+EnvironmentFile=/home/admin/.env
+Restart=on-failure
+RestartSec=3
  
  
 [Install]
