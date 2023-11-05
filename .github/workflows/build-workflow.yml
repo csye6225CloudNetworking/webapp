@@ -61,7 +61,7 @@ jobs:
       - name: Zip Application Artifact
         
         run: zip -r webapp.zip ./
-             pwd
+             
 
       - name: Install Packer
         uses: hashicorp/setup-packer@main
