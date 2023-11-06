@@ -57,7 +57,7 @@ console.log("healthy",isHealthy);
       res.setHeader("X-Content-Type-Options", "nosniff");
 
       console.log("Connection Established!");
-      logger.info('Server started and listening on port 8080');
+     // logger.info('Server started and listening on port 8080');
 
       return res.status(200).json();
     } else {
