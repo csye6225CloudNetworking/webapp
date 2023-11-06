@@ -1,21 +1,16 @@
 [Unit]
 Description=My Application Service
-After=cloud-init.target
-Wants=cloud-init.target
+After=network.target
 
- 
 [Service]
 Type=simple
 User=csye6225
 Group=csye6225
-WorkingDirectory = /home/admin/
+WorkingDirectory =/home/admin/
 ExecStart=/usr/bin/node /home/admin/app1.js
 EnvironmentFile=/home/admin/.env
-StandardOutput=syslog
-StandardError=syslog
-Restart=on-failure
+Restart=always
 RestartSec=3
- 
- 
+
 [Install]
-WantedBy=cloud-init.target
+WantedBy=multi-user.target
