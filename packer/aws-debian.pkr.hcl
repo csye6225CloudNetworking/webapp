@@ -92,7 +92,8 @@ build {
       "sudo dpkg -i -E ./amazon-cloudwatch-agent.deb",
       "echo 'CloudWatch Agent Installed'",
 
-      "sudo cp /home/admin/cloudwatch-config.json /opt/cloudwatch-config.json",
+      "sudo cp /home/admin/cloudwatch-config.json /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json",
+
 
       "sudo systemctl enable amazon-cloudwatch-agent",
       # Start CloudWatch agent
