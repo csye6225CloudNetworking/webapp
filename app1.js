@@ -2,6 +2,7 @@ import Express from 'express';
 import mysql from 'mysql2';
 export const app = Express();
 const port = 8080;
+import {logger} from './logger.js';
 import assignRouter from './routes/assign-route.js';
 import userRouter from './routes/user-route.js';
 //import intTest from './integration-tests/integration-tests.js';
@@ -57,7 +58,7 @@ console.log("healthy",isHealthy);
       res.setHeader("X-Content-Type-Options", "nosniff");
 
       console.log("Connection Established!");
-     // logger.info('Server started and listening on port 8080');
+      logger.info('Server started and listening on port 8080');
 
       return res.status(200).json();
     } else {
