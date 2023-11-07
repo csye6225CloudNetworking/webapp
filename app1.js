@@ -1,9 +1,10 @@
 import Express from 'express';
 import mysql from 'mysql2';
+import StatsD from 'node-statsd';
 export const app = Express();
 const port = 8080;
 import {logger} from './logger.js';
-import {StatsD} from 'node-statsd';
+
 import assignRouter from './routes/assign-route.js';
 import userRouter from './routes/user-route.js';
 //import intTest from './integration-tests/integration-tests.js';
