@@ -87,9 +87,13 @@ build {
       "sudo groupadd csye6225",
       "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225",
       "sudo cp /home/admin/app.service /lib/systemd/system/app.service",
-      "sudo wget https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm",
-      "sudo rpm -U ./amazon-cloudwatch-agent.rpm",
-      "sudo cp /home/admin/cloudwatch-config.json /opt/cloudwatch-config.json",
+      "echo 'Installing CloudWatch Agent'",
+      "wget https://s3.amazonaws.com/amazoncloudwatch-agent/debian/amd64/latest/amazon-cloudwatch-agent.deb",
+      "sudo dpkg -i -E ./amazon-cloudwatch-agent.deb",
+      "echo 'CloudWatch Agent Installed'",
+      "sudo systemctl enable amazon-cloudwatch-agent",
+      # Start CloudWatch agent
+      "sudo systemctl start amazon-cloudwatch-agent",
     ]
   }
 
