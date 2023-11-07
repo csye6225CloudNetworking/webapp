@@ -3,6 +3,7 @@ import mysql from 'mysql2';
 export const app = Express();
 const port = 8080;
 import {logger} from './logger.js';
+import {StatsD} from 'node-statsd';
 import assignRouter from './routes/assign-route.js';
 import userRouter from './routes/user-route.js';
 //import intTest from './integration-tests/integration-tests.js';
@@ -10,6 +11,13 @@ import userRouter from './routes/user-route.js';
 import {bootstrap} from './service/service.js';
 import dotenv from 'dotenv'
 dotenv.config()
+
+const client = new StatsD({
+  errorHandler: function (error) {
+    console.error("StatsD error: ", error);
+  }
+});
+
 //import { DataTypes } from 'sequelize';
 
 //import assignmentRoutes from './routes/assign-route.js'; // Import the assignment routes
@@ -60,6 +68,7 @@ console.log("healthy",isHealthy);
       console.log("Connection Established!");
 
       logger.info('Server started and listening on port 8080');
+      client.increment('endpoint.healthz.hits');
 
 
       return res.status(200).json();
