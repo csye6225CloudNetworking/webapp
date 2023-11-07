@@ -10,7 +10,6 @@
                     {
 
                         "file_path": "/home/admin/log/app.log",
-
                         "log_group_name": "webapploggroup",
                         "log_stream_name": "webapp"
                     },
