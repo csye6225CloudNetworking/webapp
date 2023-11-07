@@ -87,9 +87,9 @@ build {
       "sudo groupadd csye6225",
       "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225",
       "sudo cp /home/admin/app.service /lib/systemd/system/app.service",
-      "curl -O https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm",
+      "sudo wget https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm",
       "sudo rpm -U ./amazon-cloudwatch-agent.rpm",
-      "sudo cp /home/admin/cloudwatch-config.json /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json",
+      "sudo cp /home/admin/cloudwatch-config.json /opt/cloudwatch-config.json",
     ]
   }
 
