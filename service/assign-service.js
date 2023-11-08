@@ -1,6 +1,6 @@
 import Assignment from '../models/assign-model.js';
 import StatsD from 'node-statsd';
-import {logger} from '..logger.js';
+import {logger} from '../logger.js';
 import assign from '../models/assign-model.js';
 
 const client = new StatsD({
