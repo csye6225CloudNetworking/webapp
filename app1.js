@@ -1,6 +1,7 @@
 import Express from 'express';
 import mysql from 'mysql2';
 import StatsD from 'node-statsd';
+import sequelize from './seq.js';
 export const app = Express();
 const port = 8080;
 import {logger} from './logger.js';
@@ -13,17 +14,29 @@ import {bootstrap} from './service/service.js';
 import dotenv from 'dotenv'
 dotenv.config()
 
+
 const client = new StatsD({
   errorHandler: function (error) {
     console.error("StatsD error: ", error);
   }
 });
+app.use(async (req,res,next)=>{
+
+  try {
+    await sequelize.authenticate();
+    console.log("this is where the bootstrap would run")
+  } catch (error) {
+    return  res.status(503).send();
+  }
+  next();
+})
 
 //import { DataTypes } from 'sequelize';
 
 //import assignmentRoutes from './routes/assign-route.js'; // Import the assignment routes
 //app.use('/', assignmentRoutes);
 app.use(Express.json());
+
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
