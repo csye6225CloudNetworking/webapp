@@ -61,7 +61,7 @@ export async function getAssignmentsByUser() {
         if (email === userEmail) {
           const assignment = await Assignment.findOne({ where: { id : assignmentId } });
           logger.info('Get all assignments by Id!');
-          client.increment('endpoint.v1_assignments_id.hits');
+          client.increment('endpoint.v1_get_all_assignments.hits');
           return assignment;
 
       }
@@ -97,7 +97,7 @@ export async function getAssignmentsByUser() {
             { where: { id: assignmentId } }
     );
     logger.info('Update assignments!');
-    client.increment('endpoint.v1_assignments_id.hits');
+    client.increment('endpoint.v1_update_all_assignments_id.hits');
     return true;
         }
     } catch (error) {
@@ -118,7 +118,7 @@ export async function getAssignmentsByUser() {
 
             await Assignment.destroy({ where: { id: assignmentId } });
             logger.info('delete assignments!');
-            client.increment('endpoint.v1_assignments_id.hits');
+            client.increment('endpoint.v1_delete_by_id_assignments_id.hits');
             return true;
         }else {
             return false;
