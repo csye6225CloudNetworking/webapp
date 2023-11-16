@@ -2,6 +2,7 @@ import Express from 'express';
 import mysql from 'mysql2';
 import StatsD from 'node-statsd';
 import sequelize from './seq.js';
+import { createPool } from 'mysql2/promise'; 
 export const app = Express();
 const port = 8080;
 import {logger} from './logger.js';
@@ -14,7 +15,13 @@ import {bootstrap} from './service/service.js';
 import dotenv from 'dotenv'
 dotenv.config()
 
-
+const pool = createPool({
+  host: process.env.MYSQL_HOST,
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DATABASE,
+  connectionLimit: 10, // adjust the connection limit as per your needs
+});
 const client = new StatsD({
   errorHandler: function (error) {
     console.error("StatsD error: ", error);
@@ -49,30 +56,39 @@ app.use(assignRouter);
 //app.use(intTest);
 
 app.get("/healthz", async (req, res) => {
+  
   let isHealthy = false;
-  var connection = mysql.createConnection({
+  const connection = await pool.getConnection();
+/*   var connection = mysql.createConnection({
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DATABASE,
-  });
+  }); */
 
-  console.log(process.env.MYSQL_HOST,process.env.MYSQL_USER,process.env.MYSQL_PASSWORD,process.env.MYSQL_DATABASE);
+  //console.log(process.env.MYSQL_HOST,process.env.MYSQL_USER,process.env.MYSQL_PASSWORD,process.env.MYSQL_DATABASE);
   if (Object.keys(req.body).length !== 0) {
     return res.status(400).json();
   }
   if (Object.keys(req.query).length !== 0) {
     return res.status(400).json();
   }
-
-  connection.connect(function (err) {
+  if (connection) {
+    isHealthy = true;
+    console.log("healthy",isHealthy);
+    connection.release();
+  } else {
+    isHealthy = false;
+    console.log(err);
+  }
+/*   connection.connect(function (err) {
     if (err) {
       isHealthy = false;
       console.log(err);
     } else {
       isHealthy = true;
-    }
-console.log("healthy",isHealthy);
+    } */
+
     if (isHealthy) {
       
       res.setHeader("Cache-Control", "no-cache", "no-store", "must-revalidate");
@@ -91,7 +107,7 @@ console.log("healthy",isHealthy);
       return res.status(503).json();
     }
   });
-});
+
 app.listen(port,() => {console.log("server",port);
 })
 
@@ -235,7 +251,3 @@ export default app;
     }); */
 
   
-
-
-
-
