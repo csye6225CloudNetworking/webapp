@@ -31,7 +31,7 @@ variable "SSH_USERNAME" {
 
 variable "subnet_id" {
   type    = string
-  default = "subnet-0028adf715da30eb8"
+  default = "subnet-07aff86fa6f35203a"
 }
 
 source "amazon-ebs" "debian-ami" {
