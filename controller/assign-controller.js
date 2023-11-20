@@ -35,6 +35,9 @@ export async function createAssignment(req, res) {
   export async function getAssignmentsByUser(req, res) {
  
     try {
+      if (Object.keys(req.body).length !== 0) {
+        return res.status(400).json({ error: "getAssignmentID request should not contain a body." });
+      }
       if (!req.headers.authorization) {
         res.status(400).json({ error: 'Missing authentication header' });
         return;
@@ -56,6 +59,9 @@ export async function createAssignment(req, res) {
 export async function getAssignmentsById(req, res) {
   const assignmentId = req.params.id;
   console.log(assignmentId);
+  if (Object.keys(req.body).length !== 0) {
+    return res.status(400).json({ error: "getAssignmentID request should not contain a body." });
+  }
 
   try {
     if (!req.headers.authorization) {
@@ -64,15 +70,21 @@ export async function getAssignmentsById(req, res) {
     }
     const createdBy = getCred(req)[0]
     // Call the assignService to delete the assignment by ID
-   if ( await assignService.getAssignmentsById(assignmentId,createdBy)){
-      res.status(204).send(); // Respond with a success status (204 No Content)
-   }
+   const assignmentsId =  await assignService.getAssignmentsById(assignmentId,createdBy)
+
+   if (!assignmentsId) {
+    res.status(404).json({ error: 'Assignment not found' });
+    return;
+  }
+    res.status(200).json(assignmentsId); 
+    }
+    catch (error) {
+      if (error.message === "Forbidden"){
+      res.status(403).json({ error: 'Forbidden' });
+    }
     else{
-      res.status(403).send();
-    }    
-  } catch (error) {
-    console.error(error);
-    res.status(400).json({  });
+        res.status(400).json();
+    }
   }
 }
 
@@ -114,6 +126,10 @@ export async function getAssignmentsById(req, res) {
       res.status(400).json({ error: 'Missing authentication header' });
       return;
     }
+    if (!updatedAssignmentData || Object.keys(updatedAssignmentData).length === 0) {
+      return res.status(400).json({ error: 'No data provided for update.' });
+    }
+  
 
     if(await assignService.updateAssignmentById(assignmentId, updatedAssignmentData,email)){
         res.status(204).json({message: 'No Content'}); // Respond with the updated assignment data  
