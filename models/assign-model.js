@@ -24,7 +24,7 @@ const Assignment = sequelize.define('Assignment', {
     }
   },
   num_of_attempts: {
-    type: DataTypes.STRING,
+    type: DataTypes.INTEGER,
     validate: {
       min: 1,
       max: 3,

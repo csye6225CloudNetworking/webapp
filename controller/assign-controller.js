@@ -5,6 +5,10 @@ import { getCred } from '../service/auth.js';
 export async function createAssignment(req, res) {
     
     console.log("Handle the request");
+
+    if (!req.headers.authorization) {
+      return res.status(401).json({ message: 'Unauthorized. Authentication header is missing.' });
+  }
   
     const { name, points, num_of_attempts,deadline } = req.body;
    // const createdBy = req.user.email; // Assuming you have authenticated the user using email
@@ -15,15 +19,14 @@ export async function createAssignment(req, res) {
     return res.status(400).json({ message: 'Invalid assignment data.' });
   }
     try {
-        const createdBy = getCred(req)[0]
+        const createdBy = getCred(req)[0];
       const assignment = await assignService.createAssignment(name, points, num_of_attempts, deadline, createdBy);
       res.status(201).json(assignment);
     } catch (error) {
       console.error(error);
-      res.status(400).json({ message: 'Duplicate assignment' });
+      res.status(400).json({ message: 'Duplicate assignment' });    
     }
   }
-
   export const handlePatch = async (req, res) => {
     if (req.method === 'PATCH') {
       return res.status(405).json({ error: "Method Not Allowed" });
@@ -80,10 +83,10 @@ export async function getAssignmentsById(req, res) {
     }
     catch (error) {
       if (error.message === "Forbidden"){
-      res.status(403).json({ error: 'Forbidden' });
+      res.status(403).json({ error: error.message});
     }
     else{
-        res.status(400).json();
+      res.status(404).json({ error: 'Assignment not found' });
     }
   }
 }
@@ -112,7 +115,7 @@ export async function getAssignmentsById(req, res) {
       }    
     } catch (error) {
       console.error(error);
-      res.status(400).json({ message: 'Not found!' });
+      res.status(404).json({ message: 'Not found!' });
     }
   }
 
@@ -124,6 +127,10 @@ export async function getAssignmentsById(req, res) {
   try {
     if (!req.headers.authorization) {
       res.status(400).json({ error: 'Missing authentication header' });
+      return;
+    }
+    if (!assignmentId) {
+      res.status(404).json({ error: 'Assignment not found' });
       return;
     }
     if (!updatedAssignmentData || Object.keys(updatedAssignmentData).length === 0) {
@@ -140,7 +147,7 @@ export async function getAssignmentsById(req, res) {
  
   } catch (error) {
     console.error(error);
-    res.status(400).json({ message: 'Bad Request' });
+    res.status(404).json({ message: 'Not Found' });
   }
 
   }
