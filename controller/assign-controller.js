@@ -90,6 +90,28 @@ export async function getAssignmentsById(req, res) {
     }
   }
 }
+// Add a new controller method to handle assignment submissions
+export async function submitAssignment(req, res) {
+  const assignmentId = req.params.id;
+  const userEmail = getCred(req)[0];
+  const submissionData = req.body; // Assuming the submission data is in the request body
+
+  try {
+    const submissionResult = await assignService.submitAssignmentById(assignmentId, userEmail, submissionData);
+
+    res.status(201).json(submissionResult);
+  } catch (error) {
+    console.error(error);
+
+    if (error.message.includes('Submission rejected')) {
+      res.status(400).json({ error: error.message });
+    } else if (error.message.includes('Assignment with ID')) {
+      res.status(404).json({ error: error.message });
+    } else {
+      res.status(502).json({ error: 'Internal Server Error' });
+    }
+  }
+}
 
 
   export async function deleteAssignment(req, res) {

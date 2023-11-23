@@ -39,6 +39,7 @@ const Assignment = sequelize.define('Assignment', {
 
 
   });
+  
 
 
 export default Assignment;

@@ -1,6 +1,8 @@
 import Assignment from '../models/assign-model.js';
+import Submission from '../models/submission-model.js';
 import StatsD from 'node-statsd';
 import {logger} from '../logger.js';
+import { publishToSNS } from './sns-service.js'; 
 import assign from '../models/assign-model.js';
 
 const client = new StatsD({
@@ -69,8 +71,98 @@ export async function getAssignmentsByUser() {
       throw new Error(error.message);
       logger.error('Error while getting all assignments!');
     }
+  }
 
+  export async function submitAssignmentById(assignmentId, userEmail, submissionData) {
+    try {
+      const assignment = await Assignment.findOne({ where: { id: assignmentId } });
+  
+      if (!assignment) {
+        throw new Error(`Assignment with ID '${assignmentId}' not found.`);
+      }
+  
+      // Check if the assignment has passed the deadline
+      if (assignment.deadline < new Date()) {
+        throw new Error('Submission rejected. Deadline has passed.');
+      }
+  
+      // Check if the user has exceeded the number of attempts
+      if (assignment.num_of_attempts <= 0) {
+        throw new Error('Submission rejected. Exceeded maximum number of attempts.');
+      }
+  
+      // Placeholder for your specific submission logic
+      const submissionResult = await yourSubmissionLogic(assignment, submissionData);
 
+      await Submission.create({
+        id: submissionResult.id,
+        assignment_id: assignment.id,
+        submission_url: submissionResult.submission_url,
+        submission_date: submissionResult.submission_date,
+        submission_updated: submissionResult.submission_updated,
+        
+      });
+  
+      // Post the URL to the SNS topic along with user info
+      const snsMessage = {
+        id: submissionResult.id,
+        assignment_id: assignment.id,
+        submission_url: submissionResult.submission_url,
+        submission_date: submissionResult.submission_date,
+        submission_updated: submissionResult.submission_updated,
+      };
+  
+      await publishToSNS(snsMessage); // Assuming you have a function to publish to SNS
+  
+      // Save the changes to the Assignment model
+      await assignment.save();
+  
+      logger.info('Assignment Submitted!');
+  
+      // Return the submission result adhering to the specified schema
+      return {
+        id: submissionResult.id,
+        assignment_id: assignment.id,
+        submission_url: submissionResult.submission_url,
+        submission_date: submissionResult.submission_date,
+        submission_updated: submissionResult.submission_updated,
+      };
+    } catch (error) {
+      logger.error('Error while submitting assignment!');
+      console.error('Error submitting assignment:', error);
+      throw error;
+    }
+  }
+  
+  // Placeholder for your specific submission logic
+  async function yourSubmissionLogic(assignment, submissionData) {
+    try {
+      // Check if the user has already reached the maximum number of attempts
+      if (assignment.num_of_attempts >= 4) {
+        throw new Error('Submission rejected. Exceeded maximum number of attempts.');
+      }
+  
+      // Implement your submission logic here
+      // For example, you might want to store the submission details, update scores, etc.
+      // Replace this with your actual implementation
+  
+      // Decrement the number of attempts
+      assignment.num_of_attempts--;
+  
+      // Save the changes to the Assignment model
+      await assignment.save();
+  
+      // Return relevant information about the submission adhering to the specified schema
+      return {
+        id: 'generated-submission-id', // You need to generate a unique submission ID
+        submission_url: submissionData.submission_url,
+        submission_date: new Date().toISOString(),
+        submission_updated: new Date().toISOString(),
+      };
+    } catch (error) {
+      // Handle errors specific to your submission logic
+      throw error;
+    }
   }
 
   export async function updateAssignmentById(assignmentId, updatedAssignmentData, userEmail){
