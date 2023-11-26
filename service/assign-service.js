@@ -1,5 +1,6 @@
 import Assignment from '../models/assign-model.js';
 import Submission from '../models/submission-model.js';
+import { v4 as uuidv4 } from 'uuid';
 import StatsD from 'node-statsd';
 import {logger} from '../logger.js';
 import { publishToSNS } from './sns-service.js'; 
@@ -148,13 +149,16 @@ export async function getAssignmentsByUser() {
   
       // Decrement the number of attempts
       assignment.num_of_attempts--;
+
+       // Generate a unique submission ID using uuid
+    const submissionId = uuidv4();
   
       // Save the changes to the Assignment model
       await assignment.save();
   
       // Return relevant information about the submission adhering to the specified schema
       return {
-        id: 'generated-submission-id', // You need to generate a unique submission ID
+        id: submissionId, // You need to generate a unique submission ID
         submission_url: submissionData.submission_url,
         submission_date: new Date().toISOString(),
         submission_updated: new Date().toISOString(),

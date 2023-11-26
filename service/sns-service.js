@@ -12,9 +12,15 @@ const sns = new AWS.SNS();
 
 export async function publishToSNS(message) {
   try {
+      // List SNS Topics
+      const topics = await sns.listTopics().promise();
+  
+      // Assuming you want to use the first topic in the list
+      const snsTopicArn = topics.Topics[0].TopicArn;
+
     const params = {
       Message: JSON.stringify(message),
-      TopicArn: process.env.SNS_TOPIC_ARN, // Replace with your SNS topic ARN
+      TopicArn: snsTopicArn, 
     };
 
     const result = await sns.publish(params).promise();
