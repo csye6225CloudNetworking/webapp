@@ -1,4 +1,5 @@
 import * as assignService from '../service/assign-service.js';
+import Submission from '../models/submission-model.js';
 import { Buffer} from 'buffer';
 import { getCred } from '../service/auth.js';
 
@@ -92,31 +93,32 @@ export async function getAssignmentsById(req, res) {
 }
 // Add a new controller method to handle assignment submissions
 export async function submitAssignment(req, res) {
-  const assignmentId = req.params.id;
+  const assignment_id = req.params.id;
   const userEmail = getCred(req)[0];
   const submissionData = req.body; // Assuming the submission data is in the request body
-
   try {
-    const submissionResult = await assignService.submitAssignmentById(assignmentId, userEmail, submissionData);
+    const submissionResult = await assignService.submitAssignmentById(assignment_id, userEmail, submissionData);
 
     res.status(201).json(submissionResult);
   } catch (error) {
     console.error(error);
-
+    
     if (error.message.includes('Submission rejected')) {
       res.status(400).json({ error: error.message });
     } else if (error.message.includes('Assignment with ID')) {
       res.status(404).json({ error: error.message });
-    } else {
+    } else if (error.message === "Forbidden"){
+      res.status(403).json({ error: error.message});
+    }   
+    else {
       res.status(502).json({ error: 'Internal Server Error' });
     }
   }
 }
 
-
   export async function deleteAssignment(req, res) {
-    const assignmentId = req.params.id;
-    console.log(assignmentId);
+    const assignment_id = req.params.id;
+    console.log(assignment_id);
   
     try {
       if (!req.headers.authorization) {
@@ -129,7 +131,7 @@ export async function submitAssignment(req, res) {
         return;
       }
       // Call the assignService to delete the assignment by ID
-     if ( await assignService.deleteAssignmentById(assignmentId, createdBy)){
+     if ( await assignService.deleteAssignmentById(assignment_id, createdBy)){
         res.status(204).send(); // Respond with a success status (204 No Content)
      }
       else{
@@ -142,7 +144,7 @@ export async function submitAssignment(req, res) {
   }
 
   export async function updateAssignment(req, res){
-    const assignmentId = req.params.id;
+    const assignment_id = req.params.id;
   const updatedAssignmentData = req.body;
   const email = getCred(req)[0];
 
@@ -151,7 +153,7 @@ export async function submitAssignment(req, res) {
       res.status(400).json({ error: 'Missing authentication header' });
       return;
     }
-    if (!assignmentId) {
+    if (!assignment_id) {
       res.status(404).json({ error: 'Assignment not found' });
       return;
     }
@@ -160,7 +162,7 @@ export async function submitAssignment(req, res) {
     }
   
 
-    if(await assignService.updateAssignmentById(assignmentId, updatedAssignmentData,email)){
+    if(await assignService.updateAssignmentById(assignment_id, updatedAssignmentData,email)){
         res.status(204).json({message: 'No Content'}); // Respond with the updated assignment data  
     }
     else{
