@@ -78,6 +78,9 @@ export async function getAssignmentsByUser() {
     try {
       const assignment = await Assignment.findOne({ where: { id: assignmentId } });
   
+      //user createdby match -> 403
+     // submissionData.count == num of attempts
+
       if (!assignment) {
         throw new Error(`Assignment with ID '${assignmentId}' not found.`);
       }
@@ -88,8 +91,16 @@ export async function getAssignmentsByUser() {
       }
   
       // Check if the user has exceeded the number of attempts
-      if (assignment.num_of_attempts <= 0) {
-        throw new Error('Submission rejected. Exceeded maximum number of attempts.');
+      if (assignment.num_of_attempts >= 4) {
+        throw new Error('Submission rejected');
+      }
+
+      const submissionCount = await Submission.count({
+        where: { assignment_id: assignment.id },
+      });
+      if (submissionCount >= assignment.num_of_attempts) {
+        // If count exceeds num_of_attempts, return a 400 error
+        throw new Error('Submission rejected');
       }
   
       // Placeholder for your specific submission logic
@@ -111,6 +122,7 @@ export async function getAssignmentsByUser() {
         submission_url: submissionResult.submission_url,
         submission_date: submissionResult.submission_date,
         submission_updated: submissionResult.submission_updated,
+        userEmail: userEmail,
       };
   
       await publishToSNS(snsMessage); // Assuming you have a function to publish to SNS
@@ -140,21 +152,11 @@ export async function getAssignmentsByUser() {
     try {
       // Check if the user has already reached the maximum number of attempts
       if (assignment.num_of_attempts >= 4) {
-        throw new Error('Submission rejected. Exceeded maximum number of attempts.');
+        throw new Error('Submission rejected');
       }
-  
-      // Implement your submission logic here
-      // For example, you might want to store the submission details, update scores, etc.
-      // Replace this with your actual implementation
-  
-      // Decrement the number of attempts
-      assignment.num_of_attempts--;
-
        // Generate a unique submission ID using uuid
     const submissionId = uuidv4();
-  
-      // Save the changes to the Assignment model
-      await assignment.save();
+ 
   
       // Return relevant information about the submission adhering to the specified schema
       return {
