@@ -98,12 +98,12 @@ export async function getAssignmentsByUser() {
       const submissionCount = await Submission.count({
         where: { assignment_id: assignment.id },
       });
+
       if (submissionCount >= assignment.num_of_attempts) {
-        // If count exceeds num_of_attempts, return a 400 error
+       
         throw new Error('Submission rejected');
       }
   
-      // Placeholder for your specific submission logic
       const submissionResult = await yourSubmissionLogic(assignment, submissionData);
 
       await Submission.create({
@@ -115,7 +115,7 @@ export async function getAssignmentsByUser() {
         
       });
   
-      // Post the URL to the SNS topic along with user info
+
       const snsMessage = {
         id: submissionResult.id,
         assignment_id: assignment.id,
@@ -125,14 +125,12 @@ export async function getAssignmentsByUser() {
         userEmail: userEmail,
       };
   
-      await publishToSNS(snsMessage); // Assuming you have a function to publish to SNS
-  
-      // Save the changes to the Assignment model
+      await publishToSNS(snsMessage); 
+
       await assignment.save();
   
       logger.info('Assignment Submitted!');
   
-      // Return the submission result adhering to the specified schema
       return {
         id: submissionResult.id,
         assignment_id: assignment.id,
@@ -146,27 +144,24 @@ export async function getAssignmentsByUser() {
       throw error;
     }
   }
-  
-  // Placeholder for your specific submission logic
+
   async function yourSubmissionLogic(assignment, submissionData) {
     try {
-      // Check if the user has already reached the maximum number of attempts
+      
       if (assignment.num_of_attempts >= 4) {
         throw new Error('Submission rejected');
       }
        // Generate a unique submission ID using uuid
     const submissionId = uuidv4();
  
-  
-      // Return relevant information about the submission adhering to the specified schema
       return {
-        id: submissionId, // You need to generate a unique submission ID
+        id: submissionId, 
         submission_url: submissionData.submission_url,
         submission_date: new Date().toISOString(),
         submission_updated: new Date().toISOString(),
       };
     } catch (error) {
-      // Handle errors specific to your submission logic
+    
       throw error;
     }
   }
