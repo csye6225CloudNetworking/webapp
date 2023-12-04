@@ -129,7 +129,7 @@ export async function getAssignmentsByUser() {
 
       await assignment.save();
   
-      logger.info('Assignment Submitted!');
+      logger.info('Assignment Submitted!');4
   
       return {
         id: submissionResult.id,
