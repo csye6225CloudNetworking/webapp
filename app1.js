@@ -87,7 +87,7 @@ app.get("/healthz", async (req, res) => {
 app.listen(port,() => {console.log("server",port);
 })
 
-app.patch("/v1/assignments/:id", (req, res) => {
+app.patch("/v2/assignments/:id", (req, res) => {
   client.increment('endpoint.v1_assignments_id.hits');
   res.setHeader("Cache-Control", "no-cache");
   res.setHeader("Pragma", "no-cache");

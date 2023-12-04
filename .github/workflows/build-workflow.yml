@@ -98,6 +98,7 @@ jobs:
           aws autoscaling update-auto-scaling-group --auto-scaling-group-name asg_name --launch-template LaunchTemplateId=$LT_ID,Version='$Latest'
       - name: Refreshing Instances
         run: aws autoscaling start-instance-refresh --auto-scaling-group-name asg_name
+
          
 
       
