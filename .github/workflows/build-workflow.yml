@@ -103,12 +103,13 @@ jobs:
         id: wait-for-refresh
         run: |
           # Add commands to wait for the instance refresh completion
+          asg_name="asg_name"
           status="Pending"
           while [ "$status" != "Successful" ]; do
             sleep 60
             status=$(aws autoscaling describe-instance-refreshes \
 
-                      --auto-scaling-group-name asg_name \
+                      --auto-scaling-group-name "$asg_name" \
 
                       --query 'InstanceRefreshes[0].Status' \
                       --output text)
