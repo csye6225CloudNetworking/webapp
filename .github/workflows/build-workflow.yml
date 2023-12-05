@@ -111,6 +111,7 @@ jobs:
 
                       --auto-scaling-group-name "$asg_name" \
 
+
                       --query 'InstanceRefreshes[0].Status' \
                       --output text)
           echo "Current Instance Refresh Status: $status"
