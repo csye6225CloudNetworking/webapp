@@ -13,7 +13,7 @@ router.route('/v2/assignments').post(tokenize, assignController.createAssignment
 router.post('/v2/assignments/:id/submission', tokenize, assignController.submitAssignment);
 
 // GET /assignments route to retrieve assignments created by the authenticated user
-router.get('/v2/assignments', tokenize, assignController.getAssignmentsByUser);
+router.get('/v1/assignments', tokenize, assignController.getAssignmentsByUser);
 
 // GET /assignments route to retrieve assignments created by the authenticated user
 router.get('/v2/assignments/:id', tokenize, assignController.getAssignmentsById);
